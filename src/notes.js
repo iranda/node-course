@@ -1,5 +1,10 @@
-var addNote = () => {
-  console.log('addNote is executed');
+var addNote = (title, body) => {
+  const note = {
+    title,
+    body
+  };
+  const notes = [];
+  notes.push(note);
 };
 
 var removeNote = () => {
