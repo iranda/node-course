@@ -1,8 +1,8 @@
 const COMMANDS = {
-  ADD: 'ADD',
-  LIST: 'LIST',
-  READ: 'READ',
-  REMOVE: 'REMOVE',
+  ADD: 'add',
+  LIST: 'list',
+  READ: 'read',
+  REMOVE: 'remove',
 };
 
 module.exports = {
