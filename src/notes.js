@@ -35,8 +35,10 @@ var removeNote = (title) => {
   return isNoteRemoved;
 };
 
-var getNote = () => {
-  console.log('getNote is executed');
+var getNote = (title) => {
+  const notes = getNotesFromFile(FileName);
+  const filteredNotes = notes.filter(note => note.title === title);
+  return filteredNotes.length ? filteredNotes[0] : undefined;
 };
 
 var getAll = () => {

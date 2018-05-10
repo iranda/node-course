@@ -87,7 +87,30 @@ describe('notes operations', () => {
     });
   });
 
-  it('should get one note', () => {
+  describe('getNote', () => {
+    it('should get one note if it was saved', () => {
+      const fileContentMock = [ {title: 'first note', body: 'first note body'} ];
+      jest.doMock('fs', () => ({
+        readFileSync: jest.fn().mockReturnValue(
+          JSON.stringify(fileContentMock)),
+      }));
+
+      const notes = require('../../src/notes.js');
+
+      expect(notes.getNote(fileContentMock[0].title)).toEqual(fileContentMock[0]);
+    });
+
+    it('should not get anything if note is not exist', () => {
+      const fileContentMock = [ {title: 'first note', body: 'first note body'} ];
+      jest.doMock('fs', () => ({
+        readFileSync: jest.fn().mockReturnValue(
+          JSON.stringify(fileContentMock)),
+      }));
+
+      const notes = require('../../src/notes.js');
+
+      expect(notes.getNote('random title not from notes list')).toEqual(undefined);
+    });
   });
 
   it('should get notes list', () => {
