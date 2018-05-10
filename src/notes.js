@@ -23,8 +23,10 @@ var addNote = (title, body) => {
   saveNotesToFile(FileName, notes);
 };
 
-var removeNote = () => {
-  console.log('removeNote is executed');
+var removeNote = (title) => {
+  const notes = getNotesFromFile(FileName)
+    .filter(note => note.title !== title);
+  saveNotesToFile(FileName, notes);
 };
 
 var getNote = () => {

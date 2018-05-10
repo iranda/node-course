@@ -32,14 +32,12 @@ describe('notes operations', () => {
     it('should add new note to not empty storage', () => {
       const fileContentMock = [ {title: 'first note', body: 'first note body'} ];
 
-      jest.doMock('fs', () => {
-        return {
-          readFileSync: jest.fn().mockReturnValue(
-            JSON.stringify(fileContentMock)),
+      jest.doMock('fs', () => ({
+        readFileSync: jest.fn().mockReturnValue(
+          JSON.stringify(fileContentMock)),
 
-          writeFile: jest.fn(),
-        }
-      });
+        writeFile: jest.fn(),
+      }));
 
       const notes = require('../../src/notes.js');
       notes.addNote(note.title, note.body);
@@ -53,6 +51,22 @@ describe('notes operations', () => {
 
   describe('removeNote', () => {
     it('should remove note', () => {
+      const fileContentMock = [ {title: 'first note', body: 'first note body'} ];
+
+      jest.doMock('fs', () => ({
+        readFileSync: jest.fn().mockReturnValue(
+          JSON.stringify(fileContentMock)),
+
+        writeFile: jest.fn(),
+      }));
+
+      const notes = require('../../src/notes.js');
+      notes.removeNote(fileContentMock[0].title);
+
+      expect(require('fs').writeFile.mock.calls.length).toEqual(1);
+      expect(require('fs').writeFile.mock.calls[0][0]).toEqual(FileName);
+      expect(require('fs').writeFile.mock.calls[0][1]).toEqual(
+        JSON.stringify([]));
     });
   });
 
