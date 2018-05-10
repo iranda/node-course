@@ -26,7 +26,7 @@ describe('notes operations', () => {
       expect(require('fs').writeFile.mock.calls.length).toEqual(1);
       expect(require('fs').writeFile.mock.calls[0][0]).toEqual(FileName);
       expect(require('fs').writeFile.mock.calls[0][1]).toEqual(
-        JSON.stringify([ note]));
+        JSON.stringify([ note ]));
     });
 
     it('should add new note to not empty storage', () => {
@@ -46,6 +46,22 @@ describe('notes operations', () => {
       expect(require('fs').writeFile.mock.calls[0][0]).toEqual(FileName);
       expect(require('fs').writeFile.mock.calls[0][1]).toEqual(
         JSON.stringify([ ...fileContentMock, note]));
+    });
+
+    it('should not add new note if note with the same title already exists', () => {
+      const fileContentMock = [ {title: 'first note', body: 'first note body'} ];
+
+      jest.doMock('fs', () => ({
+        readFileSync: jest.fn().mockReturnValue(
+          JSON.stringify(fileContentMock)),
+
+        writeFile: jest.fn(),
+      }));
+
+      const notes = require('../../src/notes.js');
+      notes.addNote(fileContentMock[0].title, fileContentMock[0].body);
+
+      expect(require('fs').writeFile.mock.calls.length).toEqual(0);
     });
   });
 

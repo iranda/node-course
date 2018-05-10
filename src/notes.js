@@ -19,6 +19,10 @@ var addNote = (title, body) => {
     body
   };
   const notes = getNotesFromFile(FileName);
+  const isDuplicate = notes.filter(note => note.title === title).length > 0;
+
+  if (isDuplicate) return;
+
   notes.push(note);
   saveNotesToFile(FileName, notes);
 };
