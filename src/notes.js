@@ -1,10 +1,26 @@
+const fs = require('fs');
+const FileName = require('../constants.js').FILE_NAME;
+
+var getNotesFromFile = (fileName) => {
+  try {
+    return JSON.parse(fs.readFileSync(FileName));
+  } catch (err) {
+    return [];
+  }
+};
+
+var saveNotesToFile = (fileName, noteJson) => {
+  fs.writeFile(fileName, JSON.stringify(noteJson));
+};
+
 var addNote = (title, body) => {
   const note = {
     title,
     body
   };
-  const notes = [];
+  const notes = getNotesFromFile(FileName);
   notes.push(note);
+  saveNotesToFile(FileName, notes);
 };
 
 var removeNote = () => {

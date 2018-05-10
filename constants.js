@@ -5,6 +5,9 @@ const COMMANDS = {
   REMOVE: 'remove',
 };
 
+const FILE_NAME = 'notes.json';
+
 module.exports = {
   COMMANDS,
+  FILE_NAME,
 };

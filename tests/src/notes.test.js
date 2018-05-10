@@ -1,34 +1,64 @@
-const notes = require('../../src/notes.js');
+const FileName = require('../../constants.js').FILE_NAME;
 
-describe('addNote', () => {
-  let note;
-
-  beforeAll(() => {
-    note = {
-      title: 'some title',
-      body: 'body',
-    }
+describe('notes operations', () => {
+  beforeEach(() => {
+    jest.resetModules();
   });
 
-  test('should add new note to the empty storage', () => {
-    jest.mock('fs', () => ({
-      readFileSync: jest.fn(),
-    }));
+  describe('addNote', () => {
+    let note;
 
-    expect(notes.addNote(note.title, note.body)).toEqual(note);
+    beforeAll(() => {
+      note = {
+        title: 'some title',
+        body: 'body',
+      }
+    });
+
+    it('should add new note to empty storage', () => {
+      jest.mock('fs', () => ({
+        writeFile: jest.fn(),
+      }));
+
+      const notes = require('../../src/notes.js');
+      notes.addNote(note.title, note.body);
+
+      expect(require('fs').writeFile.mock.calls.length).toEqual(1);
+      expect(require('fs').writeFile.mock.calls[0][0]).toEqual(FileName);
+      expect(require('fs').writeFile.mock.calls[0][1]).toEqual(
+        JSON.stringify([ note]));
+    });
+
+    it('should add new note to not empty storage', () => {
+      const fileContentMock = [ {title: 'first note', body: 'first note body'} ];
+
+      jest.doMock('fs', () => {
+        return {
+          readFileSync: jest.fn().mockReturnValue(
+            JSON.stringify(fileContentMock)),
+
+          writeFile: jest.fn(),
+        }
+      });
+
+      const notes = require('../../src/notes.js');
+      notes.addNote(note.title, note.body);
+
+      expect(require('fs').writeFile.mock.calls.length).toEqual(1);
+      expect(require('fs').writeFile.mock.calls[0][0]).toEqual(FileName);
+      expect(require('fs').writeFile.mock.calls[0][1]).toEqual(
+        JSON.stringify([ ...fileContentMock, note]));
+    });
   });
 
-  // test('should add new note to not empty storage', () => {
-  //   notes.addNote(title, body);
-  // });
-});
+  describe('removeNote', () => {
+    it('should remove note', () => {
+    });
+  });
 
+  it('should get one note', () => {
+  });
 
-test('should remove note', () => {
-});
-
-test('should get one note', () => {
-});
-
-test('should get notes list', () => {
+  it('should get notes list', () => {
+  });
 });
