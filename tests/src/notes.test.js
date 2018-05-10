@@ -61,12 +61,29 @@ describe('notes operations', () => {
       }));
 
       const notes = require('../../src/notes.js');
-      notes.removeNote(fileContentMock[0].title);
+
+      expect(notes.removeNote(fileContentMock[0].title)).toEqual(true);
 
       expect(require('fs').writeFile.mock.calls.length).toEqual(1);
       expect(require('fs').writeFile.mock.calls[0][0]).toEqual(FileName);
       expect(require('fs').writeFile.mock.calls[0][1]).toEqual(
         JSON.stringify([]));
+    });
+
+    it('should not remove note and writeFile if note is not exist', () => {
+      const fileContentMock = [ {title: 'first note', body: 'first note body'} ];
+
+      jest.doMock('fs', () => ({
+        readFileSync: jest.fn().mockReturnValue(
+          JSON.stringify(fileContentMock)),
+
+        writeFile: jest.fn(),
+      }));
+
+      const notes = require('../../src/notes.js');
+
+      expect(notes.removeNote('random title not from notes list')).toEqual(false);
+      expect(require('fs').writeFile.mock.calls.length).toEqual(0);
     });
   });
 

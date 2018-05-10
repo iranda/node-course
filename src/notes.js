@@ -24,9 +24,15 @@ var addNote = (title, body) => {
 };
 
 var removeNote = (title) => {
-  const notes = getNotesFromFile(FileName)
-    .filter(note => note.title !== title);
-  saveNotesToFile(FileName, notes);
+  const notes = getNotesFromFile(FileName);
+  const filteredNotes = notes.filter(note => note.title !== title);
+  const isNoteRemoved = filteredNotes.length !== notes.length;
+
+  if (isNoteRemoved) {
+    saveNotesToFile(FileName, filteredNotes);
+  }
+
+  return isNoteRemoved;
 };
 
 var getNote = () => {
